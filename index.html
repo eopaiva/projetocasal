@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Minha Princesa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0710;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-pink: #ff4da6;
+            --accent-purple: #9d4edd;
+            --text-main: #ffffff;
+            --text-muted: #a9a2b3;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding-bottom: 120px;
+        }
+
+        /* --- EFEITOS DE FUNDO (RESTAURADOS) --- */
+        .aurora-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 20% 30%, rgba(255, 77, 166, 0.18) 0%, transparent 45%),
+                        radial-gradient(circle at 80% 70%, rgba(157, 78, 221, 0.18) 0%, transparent 45%);
+            filter: blur(80px);
+            animation: moveAurora 25s infinite alternate ease-in-out;
+        }
+
+        @keyframes moveAurora {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(3%, 3%) scale(1.1); }
+        }
+
+        .heart-particle {
+            position: fixed;
+            bottom: -10%;
+            color: var(--accent-pink);
+            user-select: none;
+            pointer-events: none;
+            z-index: -1;
+            animation: floatUp var(--duration) linear infinite;
+            opacity: var(--opacity);
+            font-size: var(--size);
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+            100% { transform: translateY(-115vh) translateX(var(--drift)) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- COMPONENTES --- */
+        header { margin-top: 60px; text-align: center; padding: 20px; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 10px; }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif; font-size: 2.2rem;
+            margin: 60px 0 30px 0; text-align: center; color: var(--accent-pink);
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px; padding: 35px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            text-align: center; width: 90%; max-width: 700px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        /* --- SESSÃO DA MÚSICA AO CENTRO --- */
+        .music-center-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 25px;
+            border-color: rgba(255, 77, 166, 0.3);
+        }
+        .music-status { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-pink); }
+        .play-btn-large {
+            width: 70px; height: 70px; border-radius: 50%; border: none;
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            color: white; font-size: 1.8rem; cursor: pointer;
+            box-shadow: 0 0 25px rgba(255, 77, 166, 0.4);
+            transition: 0.3s;
+            display: flex; align-items: center; justify-content: center;
+            padding-left: 5px; /* Ajuste para o ícone de play centralizar */
+        }
+        .play-btn-large:hover { transform: scale(1.1); }
+
+        /* --- CONTADORES --- */
+        .counters-wrapper { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin: 20px 0; }
+        .counter-box {
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 77, 166, 0.2);
+            border-radius: 16px; padding: 20px; min-width: 120px;
+        }
+        .counter-box span { font-family: 'Playfair Display', serif; font-size: 2.8rem; display: block; }
+        .counter-box label { font-size: 0.65rem; color: var(--accent-pink); text-transform: uppercase; letter-spacing: 2px; }
+
+        /* --- MÁQUINA DE ESCREVER --- */
+        #pote-frases {
+            margin-top: 25px; font-family: 'Playfair Display', serif;
+            font-size: 1.3rem; min-height: 80px; font-style: italic;
+            color: #ffd1dc; line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        /* --- MOTIVOS --- */
+        .reasons-list { text-align: left; max-width: 500px; margin: 0 auto; }
+        .reason-item { 
+            display: flex; align-items: center; gap: 15px; margin-bottom: 15px; 
+            padding: 10px; border-radius: 12px; background: rgba(255, 255, 255, 0.02);
+        }
+        .reason-item span { color: var(--accent-pink); font-weight: bold; }
+
+        /* --- VALES --- */
+        .coupon-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px; width: 90%; max-width: 700px;
+        }
+        .coupon-card {
+            background: rgba(255, 255, 255, 0.03); border: 2px dashed var(--accent-pink);
+            border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: 0.4s;
+        }
+        .coupon-card:hover { transform: translateY(-5px); background: rgba(255, 77, 166, 0.1); border-style: solid; }
+
+        /* --- MODAL --- */
+        .custom-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9); z-index: 2000;
+            justify-content: center; align-items: center; opacity: 0; transition: 0.3s;
+        }
+        .modal-content {
+            background: #110c18; border: 1px solid var(--accent-pink); border-radius: 24px;
+            padding: 40px; text-align: center; max-width: 400px; width: 85%;
+            transform: scale(0.8); transition: 0.3s;
+        }
+        .modal-active { opacity: 1; display: flex; }
+        .modal-active .modal-content { transform: scale(1); }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            color: white; border: none; padding: 14px 30px; border-radius: 50px;
+            font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 0.85rem;
+            text-transform: uppercase; margin-top: 10px;
+        }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 5px 20px rgba(255, 77, 166, 0.4); }
+
+        .gallery-grid { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; }
+        .gallery-item { width: 180px; height: 240px; border-radius: 15px; overflow: hidden; border: 1px solid var(--glass-border); }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+    </style>
+</head>
+<body>
+
+    <div class="aurora-bg"></div>
+    <div id="heart-container"></div>
+    <audio id="meuAudio" src="musica.mp3" loop></audio>
+
+    <header>
+        <div style="font-size: 3.5rem; animation: heartbeat 1.5s infinite; color: var(--accent-pink);">❤</div>
+        <h1>Nossa Eternidade</h1>
+        <p style="color: var(--text-muted); letter-spacing: 2px;">PARA O MEU ÚNICO AMOR</p>
+    </header>
+
+    <!-- NOVA SESSÃO DE MÚSICA CENTRALIZADA -->
+    <div class="glass-panel music-center-panel">
+        <span class="music-status" id="musicLabel">Clique para ouvir nossa trilha</span>
+        <button class="play-btn-large" id="btnMusic" onclick="toggleMusic()">▶</button>
+        <p style="font-size: 0.8rem; color: var(--text-muted);">Aperte o play e sinta o momento</p>
+    </div>
+
+    <!-- CONTADORES -->
+    <div class="glass-panel">
+        <div class="counters-wrapper">
+            <div class="counter-box"><span id="months">0</span><label>Meses</label></div>
+            <div class="counter-box"><span id="days">0</span><label>Dias</label></div>
+            <div class="counter-box"><span id="hours">0</span><label>Horas</label></div>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.8rem; color: var(--accent-pink); letter-spacing: 3px;">CONTAGEM PARA NOSSO 1º ANO:</p>
+        <div class="counters-wrapper">
+            <div class="counter-box" style="border-color: var(--accent-purple); border-style: dashed; width: 250px;">
+                <span id="countdown">0</span><label>Dias Restantes</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- POTE DE POESIA -->
+    <div class="glass-panel">
+        <h2 style="font-family: 'Playfair Display'; margin-bottom: 10px;">Pote de Sentimentos</h2>
+        <button class="btn" onclick="tirarFrase()">✨ Sortear uma frase</button>
+        <div id="pote-frases">"Clique para ver o quanto eu te amo..."</div>
+    </div>
+
+    <!-- MOTIVOS -->
+    <h2 class="section-title">Por que eu te amo?</h2>
+    <div class="glass-panel">
+        <div class="reasons-list">
+            <div class="reason-item"><span>1.</span> Seu sorriso ilumina até meus dias mais cinzas.</div>
+            <div class="reason-item"><span>2.</span> Seu jeito de cuidar de mim me faz sentir seguro.</div>
+            <div class="reason-item"><span>3.</span> Nossa sintonia é algo que eu nunca encontrei antes.</div>
+            <div class="reason-item"><span>4.</span> Você é minha melhor amiga e meu grande amor.</div>
+            <div class="reason-item"><span>5.</span> Eu amo o som da sua risada.</div>
+        </div>
+    </div>
+
+    <!-- VALES AMOR -->
+    <h2 class="section-title">Vales-Amor</h2>
+    <div class="coupon-grid">
+        <div class="coupon-card" onclick="resgatarVale('🎬 Cinema em Casa', 'Este vale dá direito a uma noite de filmes com todos os seus lanches favoritos.')">
+            <span style="font-size: 2rem;">🎬</span><h4>Cinema</h4>
+        </div>
+        <div class="coupon-card" onclick="resgatarVale('🍝 Jantar Especial', 'Eu serei o seu chef! Este vale garante um jantar romântico preparado por mim.')">
+            <span style="font-size: 2rem;">🍝</span><h4>Jantar</h4>
+        </div>
+        <div class="coupon-card" onclick="resgatarVale('🫂 Abraço Infinito', 'O melhor lugar do mundo. Pode ser trocado por um abraço bem demorado.')">
+            <span style="font-size: 2rem;">🫂</span><h4>Abraço</h4>
+        </div>
+        <div class="coupon-card" onclick="resgatarVale('✨ Dia de Mimo', 'Você merece tudo! Este vale garante um dia inteiro de carinho e massagem.')">
+            <span style="font-size: 2rem;">✨</span><h4>Mimos</h4>
+        </div>
+    </div>
+
+    <!-- GALERIA -->
+    <h2 class="section-title">Nossas Memórias</h2>
+    <div class="gallery-grid">
+        <div class="gallery-item"><img src="nossa-foto.png"></div>
+        <div class="gallery-item"><img src="foto2.png"></div>
+    </div>
+
+    <!-- CARTA FINAL -->
+    <h2 class="section-title">Para Você</h2>
+    <div class="glass-panel" style="text-align: left; line-height: 1.8;">
+        <p>Meu amor,</p><br>
+        <p>Criei este site para que você tenha sempre um lugar para onde voltar quando quiser lembrar o quanto é amada. Cada detalhe aqui foi pensado para refletir um pouco do brilho que você trouxe para minha vida desde o dia 15 de março.</p><br>
+        <p>Obrigado por ser essa pessoa incrível. Eu te amo daqui até a eternidade.</p><br>
+        <p style="text-align: right; color: var(--accent-pink);">— Com todo o meu coração.</p>
+    </div>
+
+    <!-- MODAL CUSTOMIZADO -->
+    <div id="valeModal" class="custom-modal">
+        <div class="modal-content">
+            <div style="font-size: 3rem; margin-bottom: 15px;">🎁</div>
+            <h2 id="modalTitle" style="color: var(--accent-pink); margin-bottom: 10px; font-family: 'Playfair Display';"></h2>
+            <p id="modalBody" style="font-size: 0.95rem; margin-bottom: 25px; color: #ddd;"></p>
+            <button class="btn" onclick="fecharModal()">Resgatar & Fechar</button>
+        </div>
+    </div>
+
+    <script>
+        // 1. DATAS (Início 15/03/2026)
+        function atualizarTempo() {
+            const dataInicio = new Date(2026, 2, 15);
+            const dataUmAno = new Date(2027, 2, 15);
+            const agora = new Date();
+            const diffPassou = agora - dataInicio;
+            const diasTotais = Math.floor(diffPassou / (1000 * 60 * 60 * 24));
+            document.getElementById('months').innerText = Math.floor(diasTotais / 30);
+            document.getElementById('days').innerText = diasTotais % 30;
+            document.getElementById('hours').innerText = agora.getHours();
+            const diffFalta = dataUmAno - agora;
+            const diasFaltam = Math.ceil(diffFalta / (1000 * 60 * 60 * 24));
+            document.getElementById('countdown').innerText = diasFaltam > 0 ? diasFaltam : 0;
+        }
+        setInterval(atualizarTempo, 1000);
+        atualizarTempo();
+
+        // 2. MÁQUINA DE ESCREVER
+        const frases = [
+            "Você é a razão do meu sorriso mais sincero.",
+            "O meu lugar favorito é dentro do seu abraço.",
+            "Te amo mais do que as palavras podem descrever.",
+            "Obrigado por ser minha paz em dias caóticos.",
+            "Você é o verso mais lindo que a vida escreveu para mim.",
+            "Com você, cada pequeno momento vira uma grande memória."
+        ];
+        let isTyping = false;
+        function tirarFrase() {
+            if (isTyping) return;
+            isTyping = true;
+            const display = document.getElementById('pote-frases');
+            const texto = frases[Math.floor(Math.random() * frases.length)];
+            display.textContent = "";
+            let i = 0;
+            function digitar() {
+                if (i < texto.length) {
+                    display.textContent += texto.charAt(i);
+                    i++;
+                    setTimeout(digitar, 50);
+                } else { isTyping = false; }
+            }
+            digitar();
+        }
+
+        // 3. MODAL
+        function resgatarVale(titulo, mensagem) {
+            const modal = document.getElementById('valeModal');
+            document.getElementById('modalTitle').innerText = titulo;
+            document.getElementById('modalBody').innerText = mensagem;
+            modal.classList.add('modal-active');
+        }
+        function fecharModal() {
+            document.getElementById('valeModal').classList.remove('modal-active');
+        }
+
+        // 4. CORAÇÕES DE FUNDO (REATIVADOS)
+        function createHeart() {
+            const container = document.getElementById('heart-container');
+            const heart = document.createElement('div');
+            heart.classList.add('heart-particle');
+            heart.innerHTML = '❤';
+            heart.style.setProperty('--size', Math.random() * 8 + 12 + 'px');
+            heart.style.setProperty('--duration', Math.random() * 5 + 7 + 's');
+            heart.style.setProperty('--opacity', Math.random() * 0.4 + 0.2);
+            heart.style.setProperty('--drift', Math.random() * 160 - 80 + 'px');
+            heart.style.left = Math.random() * 100 + 'vw';
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 10000);
+        }
+        setInterval(createHeart, 600);
+
+        // 5. MÚSICA (CENTRALIZADA)
+        let tocando = false;
+        const audio = document.getElementById('meuAudio');
+        function toggleMusic() {
+            const btn = document.getElementById('btnMusic');
+            const label = document.getElementById('musicLabel');
+            if(tocando) {
+                audio.pause();
+                btn.innerText = "▶";
+                btn.style.paddingLeft = "5px";
+                label.innerText = "Música pausada";
+            } else {
+                audio.play();
+                btn.innerText = "⏸";
+                btn.style.paddingLeft = "0px";
+                label.innerText = "Tocando agora...";
+            }
+            tocando = !tocando;
+        }
+    </script>
+</body>
+</html>
